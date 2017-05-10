@@ -16,6 +16,8 @@ import android.widget.TextView;
  */
 
 public class TestFragment extends Fragment {
+
+    public int tag;
     private static final String TAG = "TestFragment";
     private TextView mTextView;
     private String text;
