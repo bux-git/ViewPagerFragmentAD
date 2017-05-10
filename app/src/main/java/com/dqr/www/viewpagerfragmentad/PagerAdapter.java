@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 public class PagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "PagerAdapter";
-    private int mCurKey;
 
     SparseArray<TestFragment> mTestFragments;
 
@@ -29,7 +28,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Log.d(TAG, "getItem: "+position);
         TestFragment testFragment=mTestFragments.valueAt(position);
-        testFragment.tag=mTestFragments.keyAt(position);
         return testFragment;
     }
 
@@ -65,18 +63,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        if(mCurKey==((TestFragment)object).tag){
             return POSITION_NONE;
-        }else{
-            return POSITION_UNCHANGED;
-        }
+
 
     }
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
-        mCurKey=mTestFragments.keyAt(position);
-        Log.d("sort:", "setPrimaryItem: "+position);
     }
 }

@@ -32,7 +32,7 @@ Android Viewpager+fragment  动态添加删除Fragment  复用FragmentManager中
                 return mTestFragments.keyAt(position);
             }
             
-##### 3.重写getItem(int position)并设置tag值 此处是为了在getItemPosition()中判断刷新页面
+##### 3.重写getItem(int position)
 
     @Override
     public Fragment getItem(int position) {
@@ -41,27 +41,16 @@ Android Viewpager+fragment  动态添加删除Fragment  复用FragmentManager中
         testFragment.tag=mTestFragments.keyAt(position);
         return testFragment;
     }
-##### 4.重写setPrimaryItem()保存当前页面的tag值 便于在此处是为了在getItemPosition 中判断刷新页面
 
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-        mCurKey=mTestFragments.keyAt(position);
-        Log.d("sort:", "setPrimaryItem: "+position);
-    }
     
-##### 5.重写getItemPosition 并判断是否刷新页面    
+##### 4.重写getItemPosition 否刷新页面    
     @Override
     public int getItemPosition(Object object) {
-        if(mCurKey==((TestFragment)object).tag){
             return POSITION_NONE;
-        }else{
-            return POSITION_UNCHANGED;
-        }
-
+      
     }
     
-##### 6.新增和删除调用
+##### 5.新增和删除调用
 
                //删除
                 mTestFragments.removeAt(mCurPos);
@@ -70,15 +59,7 @@ Android Viewpager+fragment  动态添加删除Fragment  复用FragmentManager中
                 //新增
                 mTestFragments.put(key++,TestFragment.newInstance("第"+key));
                 mPagerAdapter.notifyDataSetChanged();
-                
-##### 新增时当前显示的Fragment 生命周期回调为以下，其他则没有生命周期回调 （此处还可以在getItemPosition()中判断是否为新增用以判断是否刷新当前页面）onPause--
-        onStop
-        onDestroyView
-        onCreateView
-        onStar
-        onResume
-##### 删除时当前被删除的生命周期，其他则是正常显示的生命周期回调
-       onPause
-       onStop
-       onDestroyView
-##### 经过以上处理后，新增和删除都只会影响当前Fragment的生命周期,而且他Fragment都不会重新创建，而是直接复用
+
+##### 经过以上处理后，新增和删除都只会影响当前Fragment的生命周期,其他已经缓存的Fragment都不会重新创建，而是直接在FragmentManager中读取缓存复用
+
+![image](https://github.com/bux-git/ViewPagerFragmentAD/raw/master/viewpage_fragment.gif)
